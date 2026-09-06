@@ -1,0 +1,142 @@
+:root {
+  --ink: #1c2a3a;
+  --paper: #f6f4ef;
+  --accent: #6fa3c7;
+  --accent-warm: #d79a5c;
+  --panel-bg: rgba(28, 42, 58, 0.82);
+  --panel-fg: #f6f4ef;
+  --panel-fg-dim: #c7cfd8;
+  font-family: 'Avenir Next', 'Helvetica Neue', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+}
+
+.legend {
+  position: absolute;
+  z-index: 10;
+  top: 16px;
+  left: 16px;
+  max-width: 300px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--panel-bg);
+  color: var(--panel-fg);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.legend-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.legend.collapsed {
+  max-width: none;
+  padding: 8px 12px;
+}
+
+.legend.collapsed .legend-body {
+  display: none;
+}
+
+.legend.collapsed .legend-header {
+  align-items: center;
+}
+
+.legend-collapse {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--panel-fg);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.legend-collapse:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.legend-body {
+  margin-top: 10px;
+}
+
+.legend h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.legend p {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: var(--panel-fg-dim);
+  line-height: 1.4;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  padding: 2px 0;
+}
+
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex: none;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.credit {
+  margin-top: 10px !important;
+  font-size: 0.7rem !important;
+  opacity: 0.75;
+}
+
+.credit a {
+  color: var(--accent);
+}
+
+@media (max-width: 520px) {
+  .legend {
+    max-width: calc(100vw - 32px);
+    font-size: 0.9em;
+  }
+}
