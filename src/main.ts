@@ -9,6 +9,18 @@ import {
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './style.css';
 
+// Pinned to v5.24.0, not the v6 series this project otherwise wanted
+// (matches mapterhorn-monitor's own pin, DECISIONS.md D2/D27, though for a
+// different original reason there): v6.7.0 has a real, reproducible bug
+// where any raster-dem source (our own lineage/mapterhorn tiles, and the
+// public AWS elevation-tiles-prod terrarium demo tiles alike) never
+// finishes loading -- isStyleLoaded()/'load' never fire, no error is
+// thrown, and `new Worker(...)` is never even called, with byte-identical
+// application code that works immediately under v5.24.0. Plain `raster`
+// sources and an empty style both load fine under v6, isolating the bug
+// to raster-dem specifically. Globe projection still works under v5, so
+// nothing else needed to change.
+
 // The production mapterhorn-japan-bridge viewer's own style: full basemap
 // (bvmap vector layers), terrain, and hillshade already wired up.
 // Confirmed CORS-enabled (access-control-allow-origin: *) so it's
