@@ -165,6 +165,11 @@ async function main() {
     container: mapDiv,
     style,
     ...INITIAL_VIEW,
+    // 'map' (not `true`) namespaces the URL hash as `#map=z/lat/lng/
+    // bearing/pitch` instead of a bare `#z/lat/lng/bearing/pitch` --
+    // lets the camera state live in a shareable URL without claiming the
+    // whole hash for itself.
+    hash: 'map',
     localIdeographFontFamily: 'sans-serif',
   });
 
