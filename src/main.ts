@@ -171,6 +171,38 @@ async function main() {
     // whole hash for itself.
     hash: 'map',
     localIdeographFontFamily: 'sans-serif',
+    // Fix for GH issue #1 ("がっくん" -- a visible jolt on every scroll-zoom
+    // once terrain is on). Root cause, traced through maplibre-gl's own
+    // source (src/ui/map.ts _render(), src/ui/camera.ts _updateElevation):
+    // by default (centerClampedToGround: true) MapLibre re-samples the
+    // real terrain elevation under the map's center point on *every render
+    // frame* and feeds it back into the zoom/distance math. As DEM tiles
+    // for the terrain source load in at whatever resolution the current
+    // zoom level requests, the sampled elevation for the same geographic
+    // point changes -- sometimes abruptly, e.g. when a coarser placeholder
+    // is replaced by real data, or `tileZoom` crosses an integer boundary
+    // mid-scroll -- and that changes the effective camera distance, which
+    // reads as a sudden jump/snap in the rendered view. This is a known,
+    // still-open upstream MapLibre issue independent of globe projection
+    // (github.com/maplibre/maplibre-gl-js/issues/2937, "a bug we haven't
+    // figured out how to solve yet" per a maintainer there) -- globe makes
+    // it worse on top of that (VerticalPerspectiveCameraHelper's
+    // zoom-around-cursor math in geo/projection/vertical_perspective_
+    // camera_helper.ts is itself a heuristic, its own comments calling it
+    // "glitchy in practice when used repeatedly"), but disabling globe
+    // wouldn't remove the underlying per-frame elevation feedback loop.
+    // `centerClampedToGround: false` (a real, documented Map constructor
+    // option, not a hack) turns that feedback loop off: the center's
+    // elevation baseline stays fixed at sea level instead of continuously
+    // re-tracking live terrain data, so zoom/distance no longer jumps
+    // as tiles load in. The terrain mesh itself is unaffected -- this
+    // only changes how the *camera* accounts for elevation, not what's
+    // rendered. Trade-off (per maplibre-gl's own doc comment on this
+    // option): the camera no longer automatically keeps a constant real
+    // height above whatever terrain sits directly under the center as you
+    // pan across dramatically varying elevation -- acceptable here, where
+    // the point is a legible nationwide lineage overview, not a low flythrough.
+    centerClampedToGround: false,
   });
 
   map.addControl(new NavigationControl(), 'top-right');
